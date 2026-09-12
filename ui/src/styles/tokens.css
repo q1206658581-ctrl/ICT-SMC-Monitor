@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 中性背景（深色） */
+    --bg-0: #0a0b0d;
+    --bg-1: #111315;
+    --bg-2: #181a1d;
+    --bg-3: #22262a;
+    --border: #2a2e33;
+    --border-strong: #383d44;
+
+    /* 文字 */
+    --text-1: #e6e8eb;
+    --text-2: #a0a6ad;
+    --text-3: #6b7178;
+
+    /* 品牌主色 */
+    --accent: #4f8cff;
+    --accent-hover: #6ba0ff;
+
+    /* 金融语义色 */
+    --bull: #26a69a;
+    --bear: #ef5350;
+    --neutral: #8c8c8c;
+
+    /* 状态色 */
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --info: #3b82f6;
+
+    /* ICT 结构专用色 */
+    --fvg-bull: rgba(38, 166, 154, 0.12);
+    --fvg-bear: rgba(239, 83, 80, 0.12);
+    --ob-bull: rgba(38, 166, 154, 0.20);
+    --ob-bear: rgba(239, 83, 80, 0.20);
+    --breaker: rgba(255, 152, 0, 0.18);
+    --liquidity: #ffd54f;
+    --killzone: rgba(79, 140, 255, 0.06);
+  }
+
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--bg-0);
+    color: var(--text-1);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .font-mono, .mono {
+    font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+  }
+}

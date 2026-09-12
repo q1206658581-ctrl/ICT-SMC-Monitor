@@ -1,0 +1,716 @@
+[
+  {
+    "alert": {
+      "id": "519f4b2f9eb01d77ce713561795819b1",
+      "candidate_id": "8ccd157fbc951f5990620003e94bb4ff",
+      "smt_id": "7df701cd1b18277e991eee2354a3ac2f",
+      "rule_version": "alert_v1",
+      "trigger": "C2Confirmed",
+      "symbol_set": [
+        "TVC:DXY",
+        "OANDA:AUDUSD",
+        "OANDA:NZDUSD"
+      ],
+      "sweeper_symbol": "TVC:DXY",
+      "trade_symbols": [
+        "OANDA:AUDUSD"
+      ],
+      "candidate_direction": "bearish",
+      "deterministic_score": 0.6000000238418579,
+      "c2_case": 1,
+      "c2_candle_ts": 1789023600000,
+      "c3_candle_ts": null,
+      "validation_kind": null,
+      "validation_symbol": "OANDA:AUDUSD",
+      "validation_ts": null,
+      "channels_fired": [
+        "Inbox",
+        "DesktopNotify"
+      ],
+      "created_at": 1789025400000,
+      "context_timeframe": "1h",
+      "comparison_timeframe": "30m",
+      "validation_timeframe": "5m",
+      "validation_direction": "bearish",
+      "smt_k_candle_ts": 1789023600000,
+      "context_pda_id": "0e943628f788fa0c7471956d04d68af1",
+      "watchlist_id": "aud-nzd-dxy",
+      "setup_status": "c2_confirmed"
+    },
+    "candidate": {
+      "id": "8ccd157fbc951f5990620003e94bb4ff",
+      "rule_version": "m6a.v1",
+      "watchlist_id": "aud-nzd-dxy",
+      "smt_id": "7df701cd1b18277e991eee2354a3ac2f",
+      "setup_type": "smt",
+      "symbol_set": [
+        "TVC:DXY",
+        "OANDA:AUDUSD",
+        "OANDA:NZDUSD"
+      ],
+      "sweeper_symbol": "TVC:DXY",
+      "trade_symbols": [
+        "OANDA:AUDUSD",
+        "OANDA:NZDUSD"
+      ],
+      "candidate_direction": "bullish",
+      "context_timeframe": "1h",
+      "comparison_timeframe": "30m",
+      "validation_timeframe": "5m",
+      "context_pda_id": "0e943628f788fa0c7471956d04d68af1",
+      "observation_window": [
+        1789020000000,
+        1789027200000
+      ],
+      "c1_candle": {
+        "ts": 1789021800000,
+        "open": 98.741,
+        "high": 98.763,
+        "low": 98.724,
+        "close": 98.725
+      },
+      "smt_k_candle": {
+        "ts": 1789023600000,
+        "open": 98.726,
+        "high": 98.772,
+        "low": 98.723,
+        "close": 98.743
+      },
+      "c2_candle": {
+        "ts": 1789023600000,
+        "open": 98.726,
+        "high": 98.772,
+        "low": 98.723,
+        "close": 98.743
+      },
+      "c2_case": 1,
+      "c3_candle": null,
+      "c2_cisd_event_ids": [
+        "b615a7816133351fa457dc6d7e81161b",
+        "38794da3565dd6c80a3e534026124114"
+      ],
+      "c3_cisd_event_ids": [],
+      "validation_kind": "cisd",
+      "validation_symbol": "OANDA:AUDUSD",
+      "validation_ts": 1789023600000,
+      "validation_direction": "bearish",
+      "validations": [
+        {
+          "event_id": "b615a7816133351fa457dc6d7e81161b",
+          "symbol": "OANDA:AUDUSD",
+          "kind": "cisd",
+          "direction": "bearish",
+          "ts": 1789023600000,
+          "price": 0.7213
+        },
+        {
+          "event_id": "38794da3565dd6c80a3e534026124114",
+          "symbol": "OANDA:NZDUSD",
+          "kind": "cisd",
+          "direction": "bearish",
+          "ts": 1789023600000,
+          "price": 0.58526
+        }
+      ],
+      "invalidated_symbols": [
+        "OANDA:AUDUSD",
+        "OANDA:NZDUSD"
+      ],
+      "symbol_invalidation_reasons": {
+        "OANDA:AUDUSD": "smt_invalidated",
+        "OANDA:NZDUSD": "smt_invalidated"
+      },
+      "setup_status": "invalidated",
+      "decision_status": "new",
+      "deterministic_score": 0.6,
+      "created_at": 1789023600000,
+      "validated_at": 1789023600000,
+      "expired_at": null,
+      "invalidated_at": 1789025400000,
+      "expiry_reason": "smt_invalidated",
+      "strength": [
+        {
+          "symbol": "OANDA:AUDUSD",
+          "label": "strong"
+        },
+        {
+          "symbol": "OANDA:NZDUSD",
+          "label": "strong"
+        }
+      ],
+      "expiry_at": null,
+      "smt_rule_version": "m6b.v15-pda90-smt-episodes"
+    },
+    "smt": {
+      "id": "7df701cd1b18277e991eee2354a3ac2f",
+      "watchlist_id": "aud-nzd-dxy",
+      "rule_version": "m6b.v15-pda90-smt-episodes",
+      "symbol_set": [
+        "TVC:DXY",
+        "OANDA:AUDUSD",
+        "OANDA:NZDUSD"
+      ],
+      "relationship": "negative",
+      "context_timeframe": "1h",
+      "comparison_timeframe": "30m",
+      "observation_window": [
+        1789020000000,
+        1789027200000
+      ],
+      "htf_confirmed": false,
+      "reference_scope": "local_near_pda",
+      "liquidity_refs": [
+        {
+          "symbol": "TVC:DXY",
+          "ref_price": 98.724,
+          "ref_ts": 1789020000000,
+          "side": "sell_side",
+          "status": "swept",
+          "tf": "1h",
+          "mtf_ref_candle": {
+            "ts": 1789021800000,
+            "open": 98.741,
+            "high": 98.763,
+            "low": 98.724,
+            "close": 98.725
+          },
+          "mtf_sweep_candle": {
+            "ts": 1789025400000,
+            "open": 98.74,
+            "high": 98.747,
+            "low": 98.714,
+            "close": 98.733
+          }
+        },
+        {
+          "symbol": "OANDA:AUDUSD",
+          "ref_price": 0.72205,
+          "ref_ts": 1789020000000,
+          "side": "buy_side",
+          "status": "not_swept",
+          "tf": "1h",
+          "mtf_ref_candle": {
+            "ts": 1789020000000,
+            "open": 0.72205,
+            "high": 0.72205,
+            "low": 0.7213,
+            "close": 0.72146
+          },
+          "mtf_sweep_candle": {
+            "ts": 1789025400000,
+            "open": 0.72152,
+            "high": 0.72162,
+            "low": 0.72137,
+            "close": 0.7215
+          }
+        },
+        {
+          "symbol": "OANDA:NZDUSD",
+          "ref_price": 0.58569,
+          "ref_ts": 1789020000000,
+          "side": "buy_side",
+          "status": "not_swept",
+          "tf": "1h",
+          "mtf_ref_candle": {
+            "ts": 1789021800000,
+            "open": 0.58532,
+            "high": 0.58569,
+            "low": 0.58524,
+            "close": 0.58557
+          },
+          "mtf_sweep_candle": {
+            "ts": 1789023600000,
+            "open": 0.58558,
+            "high": 0.58562,
+            "low": 0.58502,
+            "close": 0.58503
+          }
+        }
+      ],
+      "confluence_refs": [
+        {
+          "ref_price": 98.725,
+          "ref_ts": 1789018200000,
+          "side": "sell_side",
+          "tf": "30m",
+          "scope": "local_near_pda"
+        }
+      ],
+      "candidate_direction": "bullish",
+      "sweeper_symbol": "TVC:DXY",
+      "trade_symbols": [
+        "OANDA:AUDUSD",
+        "OANDA:NZDUSD"
+      ],
+      "strength": [
+        {
+          "symbol": "OANDA:AUDUSD",
+          "label": "strong"
+        },
+        {
+          "symbol": "OANDA:NZDUSD",
+          "label": "strong"
+        }
+      ],
+      "chains": [
+        {
+          "symbol": "TVC:DXY",
+          "c1_candle": {
+            "ts": 1789021800000,
+            "open": 98.741,
+            "high": 98.763,
+            "low": 98.724,
+            "close": 98.725
+          },
+          "smt_k_candle": {
+            "ts": 1789023600000,
+            "open": 98.726,
+            "high": 98.772,
+            "low": 98.723,
+            "close": 98.743
+          },
+          "c2_candle": {
+            "ts": 1789023600000,
+            "open": 98.726,
+            "high": 98.772,
+            "low": 98.723,
+            "close": 98.743
+          },
+          "c2_case": 1,
+          "c3_candle": {
+            "ts": 1789025400000,
+            "open": 98.74,
+            "high": 98.747,
+            "low": 98.714,
+            "close": 98.733
+          },
+          "detection_state": "invalidated"
+        },
+        {
+          "symbol": "OANDA:AUDUSD",
+          "c1_candle": {
+            "ts": 1789021800000,
+            "open": 0.72146,
+            "high": 0.72165,
+            "low": 0.72133,
+            "close": 0.72156
+          },
+          "smt_k_candle": {
+            "ts": 1789023600000,
+            "open": 0.72156,
+            "high": 0.72158,
+            "low": 0.72124,
+            "close": 0.72148
+          },
+          "c2_candle": {
+            "ts": 1789023600000,
+            "open": 0.72156,
+            "high": 0.72158,
+            "low": 0.72124,
+            "close": 0.72148
+          },
+          "c2_case": 1,
+          "c3_candle": null,
+          "detection_state": "invalidated"
+        },
+        {
+          "symbol": "OANDA:NZDUSD",
+          "c1_candle": {
+            "ts": 1789021800000,
+            "open": 0.58532,
+            "high": 0.58569,
+            "low": 0.58524,
+            "close": 0.58557
+          },
+          "smt_k_candle": {
+            "ts": 1789023600000,
+            "open": 0.58558,
+            "high": 0.58562,
+            "low": 0.58502,
+            "close": 0.58503
+          },
+          "c2_candle": {
+            "ts": 1789023600000,
+            "open": 0.58558,
+            "high": 0.58562,
+            "low": 0.58502,
+            "close": 0.58503
+          },
+          "c2_case": 3,
+          "c3_candle": null,
+          "detection_state": "invalidated"
+        }
+      ],
+      "invalidation_reasons": [
+        "sweeper_c3_failed",
+        "canonical_chain_changed"
+      ],
+      "invalidation_ts": 1789025400000,
+      "htf_pda_ref": {
+        "kind": "fvg",
+        "id": "0e943628f788fa0c7471956d04d68af1",
+        "tf": "1h",
+        "direction": "bullish",
+        "price_low": 98.686,
+        "price_high": 98.735,
+        "ts_open": 1788962400000,
+        "ts_confirm": 1788969600000,
+        "exit_ts": 1789027200000
+      },
+      "mtf_ref_candle": {
+        "ts": 1789021800000,
+        "open": 98.741,
+        "high": 98.763,
+        "low": 98.724,
+        "close": 98.725
+      }
+    }
+  },
+  {
+    "alert": {
+      "id": "3d861eedcd0d5809af02fc631f6a1b7e",
+      "candidate_id": "b9d738fbe90292195c80030d95948cae",
+      "smt_id": "d9e2896d91c1a3a268d6f6c8f3a1b187",
+      "rule_version": "alert_v1",
+      "trigger": "C2Confirmed",
+      "symbol_set": [
+        "TVC:DXY",
+        "OANDA:AUDUSD",
+        "OANDA:NZDUSD"
+      ],
+      "sweeper_symbol": "TVC:DXY",
+      "trade_symbols": [
+        "OANDA:AUDUSD"
+      ],
+      "candidate_direction": "bearish",
+      "deterministic_score": 0.5,
+      "c2_case": 1,
+      "c2_candle_ts": 1789005600000,
+      "c3_candle_ts": null,
+      "validation_kind": null,
+      "validation_symbol": "OANDA:AUDUSD",
+      "validation_ts": null,
+      "channels_fired": [
+        "Inbox",
+        "DesktopNotify"
+      ],
+      "created_at": 1789007400000,
+      "context_timeframe": "1h",
+      "comparison_timeframe": "30m",
+      "validation_timeframe": "5m",
+      "validation_direction": "bearish",
+      "smt_k_candle_ts": 1789005600000,
+      "context_pda_id": "0e943628f788fa0c7471956d04d68af1",
+      "watchlist_id": "aud-nzd-dxy",
+      "setup_status": "c2_confirmed"
+    },
+    "candidate": {
+      "id": "b9d738fbe90292195c80030d95948cae",
+      "rule_version": "m6a.v1",
+      "watchlist_id": "aud-nzd-dxy",
+      "smt_id": "d9e2896d91c1a3a268d6f6c8f3a1b187",
+      "setup_type": "smt",
+      "symbol_set": [
+        "TVC:DXY",
+        "OANDA:AUDUSD",
+        "OANDA:NZDUSD"
+      ],
+      "sweeper_symbol": "TVC:DXY",
+      "trade_symbols": [
+        "OANDA:AUDUSD",
+        "OANDA:NZDUSD"
+      ],
+      "candidate_direction": "bullish",
+      "context_timeframe": "1h",
+      "comparison_timeframe": "30m",
+      "validation_timeframe": "5m",
+      "context_pda_id": "0e943628f788fa0c7471956d04d68af1",
+      "observation_window": [
+        1789002000000,
+        1789009200000
+      ],
+      "c1_candle": {
+        "ts": 1789003800000,
+        "open": 98.809,
+        "high": 98.816,
+        "low": 98.728,
+        "close": 98.729
+      },
+      "smt_k_candle": {
+        "ts": 1789005600000,
+        "open": 98.727,
+        "high": 98.765,
+        "low": 98.706,
+        "close": 98.761
+      },
+      "c2_candle": {
+        "ts": 1789005600000,
+        "open": 98.727,
+        "high": 98.765,
+        "low": 98.706,
+        "close": 98.761
+      },
+      "c2_case": 1,
+      "c3_candle": null,
+      "c2_cisd_event_ids": [
+        "8e62922fd270e3239791d099083b61a5"
+      ],
+      "c3_cisd_event_ids": [],
+      "validation_kind": "cisd",
+      "validation_symbol": "OANDA:AUDUSD",
+      "validation_ts": 1789007100000,
+      "validation_direction": "bearish",
+      "validations": [
+        {
+          "event_id": "8e62922fd270e3239791d099083b61a5",
+          "symbol": "OANDA:AUDUSD",
+          "kind": "cisd",
+          "direction": "bearish",
+          "ts": 1789007100000,
+          "price": 0.72174
+        }
+      ],
+      "invalidated_symbols": [
+        "OANDA:AUDUSD",
+        "OANDA:NZDUSD"
+      ],
+      "symbol_invalidation_reasons": {
+        "OANDA:AUDUSD": "smt_invalidated",
+        "OANDA:NZDUSD": "smt_invalidated"
+      },
+      "setup_status": "invalidated",
+      "decision_status": "new",
+      "deterministic_score": 0.5,
+      "created_at": 1789005600000,
+      "validated_at": 1789007100000,
+      "expired_at": null,
+      "invalidated_at": 1789007400000,
+      "expiry_reason": "smt_invalidated",
+      "strength": [
+        {
+          "symbol": "OANDA:AUDUSD",
+          "label": "weak"
+        },
+        {
+          "symbol": "OANDA:NZDUSD",
+          "label": "strong"
+        }
+      ],
+      "expiry_at": null,
+      "smt_rule_version": "m6b.v15-pda90-smt-episodes"
+    },
+    "smt": {
+      "id": "d9e2896d91c1a3a268d6f6c8f3a1b187",
+      "watchlist_id": "aud-nzd-dxy",
+      "rule_version": "m6b.v15-pda90-smt-episodes",
+      "symbol_set": [
+        "TVC:DXY",
+        "OANDA:AUDUSD",
+        "OANDA:NZDUSD"
+      ],
+      "relationship": "negative",
+      "context_timeframe": "1h",
+      "comparison_timeframe": "30m",
+      "observation_window": [
+        1789002000000,
+        1789009200000
+      ],
+      "htf_confirmed": true,
+      "reference_scope": "local_near_pda",
+      "liquidity_refs": [
+        {
+          "symbol": "TVC:DXY",
+          "ref_price": 98.728,
+          "ref_ts": 1789002000000,
+          "side": "sell_side",
+          "status": "swept",
+          "tf": "1h",
+          "mtf_ref_candle": {
+            "ts": 1789003800000,
+            "open": 98.809,
+            "high": 98.816,
+            "low": 98.728,
+            "close": 98.729
+          },
+          "mtf_sweep_candle": {
+            "ts": 1789005600000,
+            "open": 98.727,
+            "high": 98.765,
+            "low": 98.706,
+            "close": 98.761
+          }
+        },
+        {
+          "symbol": "OANDA:AUDUSD",
+          "ref_price": 0.72186,
+          "ref_ts": 1789002000000,
+          "side": "buy_side",
+          "status": "swept",
+          "tf": "1h",
+          "mtf_ref_candle": {
+            "ts": 1789003800000,
+            "open": 0.72106,
+            "high": 0.72186,
+            "low": 0.72082,
+            "close": 0.72182
+          },
+          "mtf_sweep_candle": {
+            "ts": 1789007400000,
+            "open": 0.72175,
+            "high": 0.72221,
+            "low": 0.72161,
+            "close": 0.7222
+          }
+        },
+        {
+          "symbol": "OANDA:NZDUSD",
+          "ref_price": 0.58546,
+          "ref_ts": 1789002000000,
+          "side": "buy_side",
+          "status": "not_swept",
+          "tf": "1h",
+          "mtf_ref_candle": {
+            "ts": 1789003800000,
+            "open": 0.58439,
+            "high": 0.58546,
+            "low": 0.5843,
+            "close": 0.5854
+          },
+          "mtf_sweep_candle": {
+            "ts": 1789005600000,
+            "open": 0.5854,
+            "high": 0.5854,
+            "low": 0.58488,
+            "close": 0.58492
+          }
+        }
+      ],
+      "candidate_direction": "bullish",
+      "sweeper_symbol": "TVC:DXY",
+      "trade_symbols": [
+        "OANDA:NZDUSD"
+      ],
+      "strength": [
+        {
+          "symbol": "OANDA:AUDUSD",
+          "label": "weak"
+        },
+        {
+          "symbol": "OANDA:NZDUSD",
+          "label": "strong"
+        }
+      ],
+      "chains": [
+        {
+          "symbol": "TVC:DXY",
+          "c1_candle": {
+            "ts": 1789003800000,
+            "open": 98.809,
+            "high": 98.816,
+            "low": 98.728,
+            "close": 98.729
+          },
+          "smt_k_candle": {
+            "ts": 1789005600000,
+            "open": 98.727,
+            "high": 98.765,
+            "low": 98.706,
+            "close": 98.761
+          },
+          "c2_candle": {
+            "ts": 1789005600000,
+            "open": 98.727,
+            "high": 98.765,
+            "low": 98.706,
+            "close": 98.761
+          },
+          "c2_case": 1,
+          "c3_candle": {
+            "ts": 1789007400000,
+            "open": 98.763,
+            "high": 98.782,
+            "low": 98.723,
+            "close": 98.725
+          },
+          "detection_state": "invalidated"
+        },
+        {
+          "symbol": "OANDA:AUDUSD",
+          "c1_candle": {
+            "ts": 1789005600000,
+            "open": 0.72184,
+            "high": 0.72201,
+            "low": 0.72162,
+            "close": 0.72174
+          },
+          "smt_k_candle": {
+            "ts": 1789007400000,
+            "open": 0.72175,
+            "high": 0.72221,
+            "low": 0.72161,
+            "close": 0.7222
+          },
+          "c2_candle": null,
+          "c2_case": null,
+          "c3_candle": null,
+          "detection_state": "invalidated"
+        },
+        {
+          "symbol": "OANDA:NZDUSD",
+          "c1_candle": {
+            "ts": 1789003800000,
+            "open": 0.58439,
+            "high": 0.58546,
+            "low": 0.5843,
+            "close": 0.5854
+          },
+          "smt_k_candle": {
+            "ts": 1789005600000,
+            "open": 0.5854,
+            "high": 0.5854,
+            "low": 0.58488,
+            "close": 0.58492
+          },
+          "c2_candle": {
+            "ts": 1789005600000,
+            "open": 0.5854,
+            "high": 0.5854,
+            "low": 0.58488,
+            "close": 0.58492
+          },
+          "c2_case": 1,
+          "c3_candle": {
+            "ts": 1789007400000,
+            "open": 0.5849,
+            "high": 0.5852,
+            "low": 0.58462,
+            "close": 0.5852
+          },
+          "detection_state": "invalidated"
+        }
+      ],
+      "invalidation_reasons": [
+        "sweeper_c3_failed"
+      ],
+      "invalidation_ts": 1789007400000,
+      "htf_pda_ref": {
+        "kind": "fvg",
+        "id": "0e943628f788fa0c7471956d04d68af1",
+        "tf": "1h",
+        "direction": "bullish",
+        "price_low": 98.686,
+        "price_high": 98.735,
+        "ts_open": 1788962400000,
+        "ts_confirm": 1788969600000,
+        "exit_ts": 1789009200000
+      },
+      "mtf_ref_candle": {
+        "ts": 1789003800000,
+        "open": 98.809,
+        "high": 98.816,
+        "low": 98.728,
+        "close": 98.729
+      }
+    }
+  }
+]
