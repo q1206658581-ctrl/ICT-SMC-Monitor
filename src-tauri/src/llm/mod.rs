@@ -4,6 +4,8 @@
 //! best-effort asynchronous sidecar and can never gate alerts or notices.
 
 mod context;
+mod stored_evidence;
+pub use stored_evidence::pack_stored_evidence;
 mod liquidity_targets;
 mod pipeline;
 mod provider;

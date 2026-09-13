@@ -1,3 +1,4 @@
+import { DrawPositionButton } from '../chart/positions/DrawPositionButton';
 import { LogsPanel } from "./LogsPanel";
 import { useEffect, useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
@@ -340,6 +341,7 @@ function SetupAlertInbox() {
            <th className="px-3 py-1 text-left">状态</th>
            <th className="px-3 py-1 text-left">失效原因</th>
            <th className="px-3 py-1 text-left">评分</th>
+           <th className="px-3 py-1 text-left">仓位</th>
           </tr>
         </thead>
         <tbody>
@@ -391,6 +393,7 @@ function SetupAlertInbox() {
                 <td className="px-3 py-1 text-text-2">{candidateStatusLabel(alert.setup_status)}</td>
                 <td className="px-3 py-1 text-text-2">{invalidationReason}</td>
                 <td className="px-3 py-1 text-text-2">{alert.deterministic_score.toFixed(2)}</td>
+                <td className="px-3 py-1"><DrawPositionButton alertId={alert.id} /></td>
               </tr>
               );
             })}
@@ -637,6 +640,7 @@ function DecisionInbox() {
             <aside className="min-w-[310px] flex-[2] overflow-auto border-l px-3 py-2 text-xs" style={{ borderColor: 'var(--border)' }}>
               <div className="mb-2 flex items-center justify-between gap-2">
                 <div className="font-medium text-text-1">决策详情</div>
+                <DrawPositionButton alertId={selected.alert_id} decisionId={selected.id} />
                 <button
                   type="button"
                   className="rounded border px-2 py-1 text-text-2 disabled:cursor-not-allowed disabled:opacity-40"

@@ -20,6 +20,7 @@ src-tauri/gen/
 /output/
 /outputs/
 *.md
+!/README.md
 !/prompts/*.md
 *.pdf
 *.docx

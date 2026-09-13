@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { usePositions } from '../chart/positions/store';
 import { toast } from 'sonner';
 import { copyAppScreenshot } from '../../lib/screenshot';
 import { Sparkles, Camera, BarChart3, Bell } from 'lucide-react';
@@ -8,6 +9,8 @@ import { cn } from '../../lib/utils';
 
 export function ChartToolbar() {
   const [capturing, setCapturing] = useState(false);
+  const positionMode = usePositions(s => s.mode);
+  const setPositionMode = usePositions(s => s.setMode);
   const bottomTab = useLayoutStore((s) => s.bottomTab);
   const bottomCollapsed = useLayoutStore((s) => s.bottomCollapsed);
   const tf = useChartStore((s) => s.tf);
@@ -18,7 +21,7 @@ export function ChartToolbar() {
   const setRightCollapsed = useLayoutStore((s) => s.setRightCollapsed);
   return (
     <div
-      className="flex items-center justify-between px-3 select-none"
+      className="flex items-center justify-between gap-3 overflow-x-auto px-3 select-none"
       style={{
         height: 36,
         background: 'var(--bg-1)',
@@ -26,7 +29,7 @@ export function ChartToolbar() {
       }}
     >
       <div
-        className="flex items-center gap-1 rounded-sm p-0.5"
+        className="flex shrink-0 items-center gap-1 rounded-sm p-0.5"
         style={{ background: 'var(--bg-2)' }}
       >
         {TIMEFRAMES.map((t) => (
@@ -50,7 +53,12 @@ export function ChartToolbar() {
           </button>
         ))}
       </div>
-      <div className="flex items-center gap-1">
+      <div className="flex shrink-0 items-center gap-1">
+        {(['long', 'short'] as const).map(side => <Button key={side} size="toolbar" variant={positionMode === side ? 'default' : 'ghost'}
+          aria-pressed={positionMode === side} title="点击后在图表放置；默认间距仅作视觉参考，可拖动调整；Esc 取消"
+          onClick={() => setPositionMode(positionMode === side ? null : side)}>
+          {side === 'long' ? '⊕ 多头仓位' : '⊖ 空头仓位'}
+        </Button>)}
         <Button
           size="toolbar"
           variant={rightCollapsed ? "ghost" : "default"}

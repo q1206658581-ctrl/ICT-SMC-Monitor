@@ -1,5 +1,6 @@
 import { resolveAlertSmt } from "./alertNavigation";
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { PositionLayer, type PositionChart } from './positions/PositionLayer';
 import { applyDelayedClose } from './finalizedCandle';
 import {
   CandlestickSeries,
@@ -88,6 +89,7 @@ type ChartPaneProps = {
 
 export function ChartPane({ symbol, paneIndex, historyRows }: ChartPaneProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [positionChart, setPositionChart] = useState<PositionChart | null>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
   const overlayRef = useRef<StructureOverlay | null>(null);
@@ -165,6 +167,7 @@ export function ChartPane({ symbol, paneIndex, historyRows }: ChartPaneProps) {
     });
     chartRef.current = chart;
     seriesRef.current = series;
+    setPositionChart({ chart, series });
     overlayRef.current = new StructureOverlay(chart, series, el, symbol, tf);
     overlayRef.current.setFilter({ ...DEFAULT_FILTER, ...filters });
 
@@ -1061,6 +1064,9 @@ export function ChartPane({ symbol, paneIndex, historyRows }: ChartPaneProps) {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative w-full h-full" style={{ background: 'var(--bg-0)' }} />
+    <div className="relative w-full h-full" style={{ background: 'var(--bg-0)' }}>
+      <div ref={containerRef} className="absolute inset-0" />
+      {positionChart && <PositionLayer key={`${symbol}|${tf}`} api={positionChart} symbol={symbol} tf={tf} paneIndex={paneIndex} ready={!!historyRows?.length} />}
+    </div>
   );
 }

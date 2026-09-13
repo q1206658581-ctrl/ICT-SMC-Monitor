@@ -19,7 +19,7 @@ use crate::types::Bar;
 
 #[derive(Clone)]
 pub struct SqliteStore {
-    pool: Pool<SqliteConnectionManager>,
+    pub(super) pool: Pool<SqliteConnectionManager>,
     path: PathBuf,
 }
 
@@ -48,6 +48,7 @@ impl SqliteStore {
 
         let store = Self { pool, path };
         store.init_schema()?;
+        store.ensure_user_positions_schema()?;
         Ok(store)
     }
 

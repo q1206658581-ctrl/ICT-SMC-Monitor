@@ -1076,6 +1076,11 @@ fn main() {
             list_candidates,
             list_decisions,
             list_llm_decision_items,
+            list_user_positions,
+            create_user_position,
+            update_user_position,
+            delete_user_position,
+            get_user_position_draft,
             list_alerts,
             list_reversals,
             set_alert_param,
@@ -5955,4 +5960,87 @@ fn durable_alert_history_survives_invalidated_and_removed_c2() {
         );
         assert!(result[0].invalidation_reason.is_some());
     }
+}
+
+// User drawings are an isolated manual annotation surface.
+#[tauri::command]
+async fn list_user_positions(
+    state: tauri::State<'_, AppState>,
+    symbol: String,
+) -> Result<Vec<ict_monitor::positions::UserPosition>, String> {
+    state
+        .store
+        .list_user_positions(&symbol)
+        .map_err(|e| e.to_string())
+}
+#[tauri::command]
+async fn create_user_position(
+    state: tauri::State<'_, AppState>,
+    symbol: String,
+    side: ict_monitor::positions::PositionSide,
+    entry: f64,
+    stop: f64,
+    target: Option<f64>,
+    source_alert_id: Option<String>,
+    drawn_tf: Option<String>,
+) -> Result<String, String> {
+    state
+        .store
+        .create_user_position(
+            &symbol,
+            ict_monitor::positions::PositionPrices {
+                side,
+                entry_price: entry,
+                stop_price: stop,
+                target_price: target,
+            },
+            source_alert_id,
+            drawn_tf,
+        )
+        .map(|p| p.id)
+        .map_err(|e| e.to_string())
+}
+#[tauri::command]
+async fn update_user_position(
+    state: tauri::State<'_, AppState>,
+    id: String,
+    side: ict_monitor::positions::PositionSide,
+    entry: f64,
+    stop: f64,
+    target: Option<f64>,
+) -> Result<ict_monitor::positions::UserPosition, String> {
+    state
+        .store
+        .update_user_position(
+            &id,
+            ict_monitor::positions::PositionPrices {
+                side,
+                entry_price: entry,
+                stop_price: stop,
+                target_price: target,
+            },
+        )
+        .map_err(|e| e.to_string())
+}
+#[tauri::command]
+async fn delete_user_position(state: tauri::State<'_, AppState>, id: String) -> Result<(), String> {
+    state
+        .store
+        .delete_user_position(&id)
+        .map_err(|e| e.to_string())
+}
+#[tauri::command]
+async fn get_user_position_draft(
+    state: tauri::State<'_, AppState>,
+    alert_id: String,
+    decision_id: Option<String>,
+) -> Result<ict_monitor::positions::PositionDraft, String> {
+    let store = state.store.clone();
+    tauri::async_runtime::spawn_blocking(move || {
+        store
+            .user_position_draft(&alert_id, decision_id.as_deref())
+            .map_err(|e| e.to_string())
+    })
+    .await
+    .map_err(|e| e.to_string())?
 }
