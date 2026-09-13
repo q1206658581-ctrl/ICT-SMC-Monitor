@@ -27,6 +27,7 @@ pub enum AlertTrigger {
 pub enum ChannelKind {
     Inbox,
     DesktopNotify,
+    FeishuNotify,
 }
 
 /// A fired alert record (§13 compliant: pure facts only).
@@ -76,6 +77,7 @@ pub struct AlertRecord {
 pub struct AlertConfig {
     pub enabled: bool,
     pub desktop_notify_enabled: bool,
+    pub feishu_notify_enabled: bool,
     pub cooldown_seconds: i64,
 }
 
@@ -84,6 +86,7 @@ impl Default for AlertConfig {
         Self {
             enabled: true,
             desktop_notify_enabled: true,
+            feishu_notify_enabled: false,
             cooldown_seconds: 0,
         }
     }

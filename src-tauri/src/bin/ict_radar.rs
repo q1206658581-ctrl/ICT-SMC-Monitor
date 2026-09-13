@@ -31,7 +31,8 @@ use ict_monitor::aggregator::{
     has_incomplete_h4_window, next_window_boundary, SymbolAggregator,
 };
 use ict_monitor::alert::{
-    AlertEngine, AlertRecord, AlertTrigger, DesktopNotifyChannel, InboxChannel,
+    AlertEngine, AlertRecord, AlertTrigger, DesktopNotifyChannel, FeishuAlertSender,
+    FeishuNotifyChannel, InboxChannel,
 };
 use ict_monitor::candidate::{
     extract_ltf_events, CandidateEngine, CandidateSetup, DecisionLogEntry,
@@ -908,6 +909,8 @@ fn main() {
         proxy_url: cfg.tradingview.proxy_url.clone(),
     };
     let tv_client = TvClient::with_auth(tv_auth.clone());
+    let feishu_sender = FeishuAlertSender::new(cfg.alerts.feishu.clone());
+    let feishu_notify_default = cfg.alerts.feishu.enabled;
 
     let aggregators: Arc<
         AsyncMutex<std::collections::HashMap<String, Arc<AsyncMutex<SymbolAggregator>>>>,
@@ -1009,6 +1012,7 @@ fn main() {
                 global_alert_cooldown.clone(),
             ),
         ));
+        alerts.lock().set_feishu_notify(feishu_notify_default);
         group_map.insert(
             watchlist.id.clone(),
             Arc::new(EngineGroup {
@@ -1040,6 +1044,7 @@ fn main() {
         engine_groups: engine_groups.clone(),
         llm_decisions: llm_decisions.clone(),
         global_alert_cooldown: global_alert_cooldown.clone(),
+        feishu_sender: feishu_sender.clone(),
         active_watchlist: active_watchlist_h.clone(),
         config: config.clone(),
     };
@@ -1081,11 +1086,13 @@ fn main() {
             set_alert_param,
             clear_alerts,
             test_desktop_notification,
+            test_feishu_notification,
             set_viewing_group,
             set_active_watchlist,
         ])
         .setup(move |app| {
             ict_monitor::alert::prepare_desktop_notifications();
+            feishu_sender.start_worker();
             if let Some(pipeline) = llm_decisions_for_setup.clone() {
                 tauri::async_runtime::spawn(async move {
                     match pipeline.recover_stale_pending().await {
@@ -1110,6 +1117,7 @@ fn main() {
                         app.handle().clone(),
                     )));
                     ae.add_channel(Box::new(DesktopNotifyChannel::new(app.handle().clone())));
+                    ae.add_channel(Box::new(FeishuNotifyChannel::new(feishu_sender.clone())));
                 }
             }
             let handle = app.handle().clone();
@@ -4905,7 +4913,10 @@ async fn reconcile_watchlist_runtime(
     sub_manager: &tauri::State<'_, Arc<AsyncMutex<SubManager>>>,
     app: &tauri::AppHandle,
 ) -> Result<(), String> {
-    let desired = state.config.read().watchlists.clone();
+    let (desired, feishu_notify_default) = {
+        let cfg = state.config.read();
+        (cfg.watchlists.clone(), cfg.alerts.feishu.enabled)
+    };
     let desired_ids: std::collections::HashSet<String> = desired
         .iter()
         .map(|watchlist| watchlist.id.clone())
@@ -4937,11 +4948,15 @@ async fn reconcile_watchlist_runtime(
             ));
             {
                 let mut alert_engine = alerts.lock();
+                alert_engine.set_feishu_notify(feishu_notify_default);
                 alert_engine.add_channel(Box::new(InboxChannel::new(
                     state.store.clone(),
                     app.clone(),
                 )));
                 alert_engine.add_channel(Box::new(DesktopNotifyChannel::new(app.clone())));
+                alert_engine.add_channel(Box::new(FeishuNotifyChannel::new(
+                    state.feishu_sender.clone(),
+                )));
             }
             let group = Arc::new(EngineGroup {
                 watchlist: watchlist.clone(),
@@ -5500,6 +5515,27 @@ async fn test_desktop_notification(
     )
 }
 
+#[tauri::command]
+async fn test_feishu_notification(state: tauri::State<'_, AppState>) -> Result<(), String> {
+    let (enabled, feishu_notify) = state
+        .engine_groups
+        .read()
+        .values()
+        .next()
+        .map(|group| {
+            let alerts = group.alerts.lock();
+            (alerts.enabled(), alerts.feishu_notify_enabled())
+        })
+        .unwrap_or((false, false));
+    if !enabled {
+        return Err("告警总开关已关闭，请在 Alerts 设置中打开后再测试".into());
+    }
+    if !feishu_notify {
+        return Err("飞书通知已关闭，请在 Alerts 设置中打开后再测试".into());
+    }
+    state.feishu_sender.send_test_message().await
+}
+
 fn apply_alert_param(alerts: &mut AlertEngine, key: &str, value: &serde_json::Value) {
     match key {
         "schema_v1" => { /* migration marker, skip */ }
@@ -5511,6 +5547,11 @@ fn apply_alert_param(alerts: &mut AlertEngine, key: &str, value: &serde_json::Va
         "desktop_notify_enabled" => {
             if let Some(b) = value.as_bool() {
                 alerts.set_desktop_notify(b);
+            }
+        }
+        "feishu_notify_enabled" => {
+            if let Some(b) = value.as_bool() {
+                alerts.set_feishu_notify(b);
             }
         }
         "cooldown_seconds" => {

@@ -7,6 +7,8 @@
 
 pub mod channels;
 pub use channels::*;
+pub mod feishu;
+pub use feishu::*;
 #[cfg(test)]
 mod tests;
 pub mod types;
@@ -78,8 +80,16 @@ impl AlertEngine {
         self.config.desktop_notify_enabled = v;
     }
 
+    pub fn set_feishu_notify(&mut self, v: bool) {
+        self.config.feishu_notify_enabled = v;
+    }
+
     pub fn desktop_notify_enabled(&self) -> bool {
         self.config.desktop_notify_enabled
+    }
+
+    pub fn feishu_notify_enabled(&self) -> bool {
+        self.config.feishu_notify_enabled
     }
 
     pub fn enabled(&self) -> bool {
@@ -228,6 +238,8 @@ impl AlertEngine {
                         channel.kind() == ChannelKind::Inbox
                             || (channel.kind() == ChannelKind::DesktopNotify
                                 && self.config.desktop_notify_enabled)
+                            || (channel.kind() == ChannelKind::FeishuNotify
+                                && self.config.feishu_notify_enabled)
                     })
                     .map(|channel| channel.kind())
                     .collect()

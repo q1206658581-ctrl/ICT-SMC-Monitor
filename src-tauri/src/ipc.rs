@@ -107,6 +107,7 @@ pub struct AppState {
     /// One cooldown clock shared by every group. Runtime-created groups must
     /// join the same clock instead of silently gaining an independent quota.
     pub global_alert_cooldown: AlertCooldownHandle,
+    pub feishu_sender: crate::alert::FeishuAlertSender,
     /// Currently active watchlist (M5).
     pub active_watchlist: Arc<Mutex<Option<Watchlist>>>,
     /// Full app config (watchlists + TV creds) for CRUD commands (M5).
