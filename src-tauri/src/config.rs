@@ -36,6 +36,7 @@ impl LlmApiKeySource {
 pub struct AppConfig {
     pub tradingview: TradingViewConfig,
     pub llm: LlmConfig,
+    pub alerts: AlertsConfig,
     #[serde(default)]
     pub watchlists: Vec<Watchlist>,
     /// Symbols saved for chart viewing; no strategy group is inferred.
@@ -257,6 +258,31 @@ pub struct TradingViewConfig {
     pub proxy_url: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+#[serde(default)]
+pub struct AlertsConfig {
+    pub feishu: FeishuAlertConfig,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(default)]
+pub struct FeishuAlertConfig {
+    pub enabled: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub webhook_url: Option<String>,
+    pub timeout_ms: u64,
+}
+
+impl Default for FeishuAlertConfig {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+            webhook_url: None,
+            timeout_ms: 3_000,
+        }
+    }
+}
+
 impl AppConfig {
     pub fn load() -> Result<Self> {
         let path = config_path();
@@ -293,6 +319,13 @@ impl AppConfig {
         // Merge in any built-in watchlists that are missing from the
         // config file (e.g. a new default added in a code update).
         cfg.watchlists = watchlist::merge_defaults(&cfg.watchlists);
+        cfg.alerts.feishu.webhook_url = cfg.alerts.feishu.webhook_url.and_then(|url| {
+            let trimmed = url.trim();
+            (!trimmed.is_empty()).then(|| trimmed.to_owned())
+        });
+        if cfg.alerts.feishu.timeout_ms == 0 {
+            cfg.alerts.feishu.timeout_ms = FeishuAlertConfig::default().timeout_ms;
+        }
         cfg
     }
 
@@ -305,6 +338,36 @@ impl AppConfig {
         let out = toml::to_string_pretty(self).context("serialize config")?;
         std::fs::write(&path, out).with_context(|| format!("write {}", path.display()))?;
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod alert_config_tests {
+    use super::*;
+
+    #[test]
+    fn feishu_alert_config_defaults_to_disabled() {
+        let cfg = AppConfig::default();
+        assert!(!cfg.alerts.feishu.enabled);
+        assert!(cfg.alerts.feishu.webhook_url.is_none());
+        assert_eq!(cfg.alerts.feishu.timeout_ms, 3_000);
+    }
+
+    #[test]
+    fn feishu_empty_webhook_is_normalized_to_none() {
+        let cfg: AppConfig = toml::from_str(
+            r#"
+            [alerts.feishu]
+            enabled = true
+            webhook_url = ""
+            timeout_ms = 0
+            "#,
+        )
+        .expect("parse config");
+        let cfg = AppConfig::normalize(cfg);
+        assert!(cfg.alerts.feishu.enabled);
+        assert!(cfg.alerts.feishu.webhook_url.is_none());
+        assert_eq!(cfg.alerts.feishu.timeout_ms, 3_000);
     }
 }
 

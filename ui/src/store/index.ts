@@ -67,6 +67,7 @@ type ChartState = {
   highlightCandidateId: string | null;
   alertEnabled: boolean;
   desktopNotifyEnabled: boolean;
+  feishuNotifyEnabled: boolean;
   cooldownSeconds: number;
   highlightAlertId: string | null;
   highlightForceIndicators: boolean;
@@ -88,6 +89,7 @@ type ChartState = {
   setHighlightCandidate: (id: string | null) => void;
   setAlertEnabled: (b: boolean) => void;
   setDesktopNotifyEnabled: (b: boolean) => void;
+  setFeishuNotifyEnabled: (b: boolean) => void;
   setCooldownSeconds: (n: number) => void;
   setHighlightAlert: (id: string | null) => void;
   setHighlightForceIndicators: (b: boolean) => void;
@@ -119,6 +121,7 @@ export const useChartStore = create<ChartState>()(
       highlightCandidateId: null,
       alertEnabled: true,
       desktopNotifyEnabled: true,
+      feishuNotifyEnabled: false,
       cooldownSeconds: 0,
       highlightAlertId: null,
       highlightForceIndicators: false,
@@ -182,6 +185,7 @@ export const useChartStore = create<ChartState>()(
       }),
       setAlertEnabled: (b) => set({ alertEnabled: b }),
       setDesktopNotifyEnabled: (b) => set({ desktopNotifyEnabled: b }),
+      setFeishuNotifyEnabled: (b) => set({ feishuNotifyEnabled: b }),
       setCooldownSeconds: (n) => set({ cooldownSeconds: n }),
       setHighlightAlert: (id) => set({
         highlightAlertId: id,
@@ -205,6 +209,7 @@ export const useChartStore = create<ChartState>()(
         candidateValidatedOnly: s.candidateValidatedOnly,
         alertEnabled: s.alertEnabled,
         desktopNotifyEnabled: s.desktopNotifyEnabled,
+        feishuNotifyEnabled: s.feishuNotifyEnabled,
         cooldownSeconds: s.cooldownSeconds,
       }),
     },

@@ -1,0 +1,16 @@
+# 可选：指定启动时激活的监控组。
+active_watchlist_id = "chf-cad-dxy"
+
+[tradingview]
+# 从你自己的 TradingView 登录会话 Cookie 填写；不要提交真实值到 Git。
+sessionid = ""
+sessionid_sign = ""
+# 不需要代理时留空；示例："http://127.0.0.1:7897"
+proxy_url = ""
+
+[alerts.feishu]
+# 绑定到一个飞书群自定义机器人；不要提交真实 webhook URL。
+# MVP 不做签名校验，可在飞书机器人后台可选配置关键词：ICT Radar。
+enabled = false
+webhook_url = ""
+timeout_ms = 3000

@@ -745,6 +745,121 @@ fn t9_desktop_notify_disabled() {
     );
 }
 
+#[test]
+fn c2_feishu_notify_enabled_adds_feishu_channel() {
+    use std::sync::Mutex;
+    struct MockChannel {
+        ch_kind: ChannelKind,
+        fired: Arc<Mutex<bool>>,
+    }
+    impl AlertChannel for MockChannel {
+        fn kind(&self) -> ChannelKind {
+            self.ch_kind
+        }
+        fn deliver(&self, _alert: &AlertRecord) -> Result<(), String> {
+            *self.fired.lock().unwrap() = true;
+            Ok(())
+        }
+    }
+
+    let mut candidate = make_candidate("c2-feishu-on", SetupStatus::C2Confirmed);
+    candidate.trade_symbols = vec!["OANDA:EURUSD".into()];
+    let smt = make_two_symbol_c2_smt(&candidate);
+    let mut engine = AlertEngine::new();
+    engine.set_feishu_notify(true);
+    let inbox_fired = Arc::new(Mutex::new(false));
+    let feishu_fired = Arc::new(Mutex::new(false));
+    engine.add_channel(Box::new(MockChannel {
+        ch_kind: ChannelKind::Inbox,
+        fired: inbox_fired.clone(),
+    }));
+    engine.add_channel(Box::new(MockChannel {
+        ch_kind: ChannelKind::FeishuNotify,
+        fired: feishu_fired.clone(),
+    }));
+
+    let rows = engine.on_c2_confirmed(&candidate, &smt, false);
+    assert_eq!(rows.len(), 1);
+    assert!(rows[0].channels_fired.contains(&ChannelKind::Inbox));
+    assert!(rows[0].channels_fired.contains(&ChannelKind::FeishuNotify));
+    assert!(*inbox_fired.lock().unwrap());
+    assert!(*feishu_fired.lock().unwrap());
+}
+
+#[test]
+fn c2_feishu_notify_disabled_skips_feishu_channel() {
+    use std::sync::Mutex;
+    struct MockChannel {
+        ch_kind: ChannelKind,
+        fired: Arc<Mutex<bool>>,
+    }
+    impl AlertChannel for MockChannel {
+        fn kind(&self) -> ChannelKind {
+            self.ch_kind
+        }
+        fn deliver(&self, _alert: &AlertRecord) -> Result<(), String> {
+            *self.fired.lock().unwrap() = true;
+            Ok(())
+        }
+    }
+
+    let mut candidate = make_candidate("c2-feishu-off", SetupStatus::C2Confirmed);
+    candidate.trade_symbols = vec!["OANDA:EURUSD".into()];
+    let smt = make_two_symbol_c2_smt(&candidate);
+    let mut engine = AlertEngine::new();
+    engine.set_feishu_notify(false);
+    let feishu_fired = Arc::new(Mutex::new(false));
+    engine.add_channel(Box::new(MockChannel {
+        ch_kind: ChannelKind::Inbox,
+        fired: Arc::new(Mutex::new(false)),
+    }));
+    engine.add_channel(Box::new(MockChannel {
+        ch_kind: ChannelKind::FeishuNotify,
+        fired: feishu_fired.clone(),
+    }));
+
+    let rows = engine.on_c2_confirmed(&candidate, &smt, false);
+    assert_eq!(rows.len(), 1);
+    assert!(!rows[0].channels_fired.contains(&ChannelKind::FeishuNotify));
+    assert!(!*feishu_fired.lock().unwrap());
+}
+
+#[test]
+fn validated_alert_never_routes_to_feishu() {
+    use std::sync::Mutex;
+    struct MockChannel {
+        ch_kind: ChannelKind,
+        fired: Arc<Mutex<bool>>,
+    }
+    impl AlertChannel for MockChannel {
+        fn kind(&self) -> ChannelKind {
+            self.ch_kind
+        }
+        fn deliver(&self, _alert: &AlertRecord) -> Result<(), String> {
+            *self.fired.lock().unwrap() = true;
+            Ok(())
+        }
+    }
+
+    let mut engine = AlertEngine::new();
+    engine.set_feishu_notify(true);
+    let feishu_fired = Arc::new(Mutex::new(false));
+    engine.add_channel(Box::new(MockChannel {
+        ch_kind: ChannelKind::Inbox,
+        fired: Arc::new(Mutex::new(false)),
+    }));
+    engine.add_channel(Box::new(MockChannel {
+        ch_kind: ChannelKind::FeishuNotify,
+        fired: feishu_fired.clone(),
+    }));
+    let c2 = make_change("validated-no-feishu", SetupStatus::C2Confirmed);
+    engine.on_candidate_change(&c2, 1000, true);
+    let val = make_change("validated-no-feishu", SetupStatus::Validated);
+    let alert = engine.on_candidate_change(&val, 2000, false).unwrap();
+    assert!(!alert.channels_fired.contains(&ChannelKind::FeishuNotify));
+    assert!(!*feishu_fired.lock().unwrap());
+}
+
 // T10: list_alerts + has_fired_for_candidate with a real SQLite store.
 #[test]
 fn t10_list_alerts_with_store() {
@@ -875,6 +990,11 @@ fn t11_alert_params_hot_update() {
         engine.on_candidate_change(&val_c, 6000, false).is_none(),
         "high cooldown should suppress"
     );
+
+    engine.set_feishu_notify(true);
+    assert!(engine.feishu_notify_enabled());
+    engine.set_feishu_notify(false);
+    assert!(!engine.feishu_notify_enabled());
 }
 
 // T14: A2 regression - channels_fired is non-empty and correct in the

@@ -3,7 +3,7 @@
 import type { ExpiryReason } from './candidate';
 
 export type AlertTrigger = 'C2Confirmed' | 'Validated';
-export type ChannelKind = 'Inbox' | 'DesktopNotify';
+export type ChannelKind = 'Inbox' | 'DesktopNotify' | 'FeishuNotify';
 
 export type AlertRecord = {
   id: string;

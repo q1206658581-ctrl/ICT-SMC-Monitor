@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Parameter, Help } from './ParameterHelp';
 import { INDICATOR_HELP } from './indicatorHelp';
 import { invoke } from '@tauri-apps/api/core';
-import { ChevronRight } from 'lucide-react';
+import { Bell, ChevronRight, Send } from 'lucide-react';
 import { useChartStore, useDetectorStore, useLayoutStore } from '../../store';
 import { Button } from '../ui/button';
 import { Switch } from '../ui/switch';
@@ -140,6 +140,14 @@ export function RightDrawer() {
                 ariaLabel="toggle desktop notify"
               />
             </Parameter>
+            <Parameter className="flex items-center justify-between gap-2 text-xs text-text-2" title="推送到 config.toml 中配置的飞书群自定义机器人。">
+              <span>飞书通知</span>
+              <Switch
+                checked={chart.feishuNotifyEnabled}
+                onCheckedChange={(b) => { chart.setFeishuNotifyEnabled(b); setAlertParam('feishu_notify_enabled', b); }}
+                ariaLabel="toggle feishu notify"
+              />
+            </Parameter>
             <Parameter
               className="flex items-center justify-between gap-2 text-xs text-text-2"
               title="两次告警之间至少间隔多少秒，跨分组共同使用。例如 60 表示一分钟内不重复发出告警；0 表示不限制。会影响告警发送，不是图表显示设置。"
@@ -157,7 +165,27 @@ export function RightDrawer() {
                 }}
               />
             </Parameter>
-
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => invoke('test_desktop_notification').catch((e) => console.warn(e))}
+                className="text-xs"
+              >
+                <Bell size={13} />
+                桌面
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                title="使用 config.toml 中的飞书 webhook 发送测试消息。"
+                onClick={() => invoke('test_feishu_notification').catch((e) => console.warn(e))}
+                className="text-xs"
+              >
+                <Send size={13} />
+                飞书
+              </Button>
+            </div>
           </div>
         </Card>
 
